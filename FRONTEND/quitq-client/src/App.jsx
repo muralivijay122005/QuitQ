@@ -3,13 +3,16 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 
 import Login from "./pages/Login";
-import Checkout from "./pages/Checkout";
+import Favorites from "./pages/Favorites";
+
 import Register from "./pages/Register";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import ManageProducts from "./pages/admin/ManageProducts";
 import ManageCategories from "./pages/admin/ManageCategories";
 import ManageOrders from "./pages/admin/ManageOrders";
 import Orders from "./pages/Orders";
+import Profile from "./pages/Profile";
+import Checkout from "./pages/Checkout";
 import OrderDetails from "./pages/OrderDetails";
 import Home from "./pages/Home";
 import ProductDetails from "./pages/ProductDetails";
@@ -18,10 +21,13 @@ import Cart from "./pages/Cart";
 import NotFound from "./pages/NotFound";
 
 function App() {
-    const { isAuthenticated } = useAuth();
+    const {
+        isAuthenticated,
+        isAdmin
+    } = useAuth();
 
     return (
-        <div className="bg-slate-950 min-h-screen text-white">
+        <div className="bg-neutral-50 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 min-h-screen ">
             <Routes>
 
                 <Route path="/login" element={<Login />} />
@@ -53,6 +59,7 @@ function App() {
                             : <Navigate to="/login" />
                     }
                 />
+                <Route path="/favorites" element={isAuthenticated ? <Favorites /> : <Navigate to="/login" />} />
                 <Route path="*" element={<NotFound />} />
                 <Route
                     path="/cart"
@@ -67,6 +74,14 @@ function App() {
                     element={
                         isAuthenticated
                             ? <Checkout />
+                            : <Navigate to="/login" />
+                    }
+                />
+                <Route
+                    path="/profile"
+                    element={
+                        isAuthenticated
+                            ? <Profile />
                             : <Navigate to="/login" />
                     }
                 />
@@ -90,36 +105,36 @@ function App() {
                 <Route
                     path="/admin"
                     element={
-                        isAuthenticated
+                        isAuthenticated && isAdmin
                             ? <AdminDashboard />
-                            : <Navigate to="/login" />
+                            : <Navigate to="/" />
                     }
                 />
 
                 <Route
                     path="/admin/products"
                     element={
-                        isAuthenticated
+                        isAuthenticated && isAdmin
                             ? <ManageProducts />
-                            : <Navigate to="/login" />
+                            : <Navigate to="/" />
                     }
                 />
 
                 <Route
                     path="/admin/categories"
                     element={
-                        isAuthenticated
+                        isAuthenticated && isAdmin
                             ? <ManageCategories />
-                            : <Navigate to="/login" />
+                            : <Navigate to="/" />
                     }
                 />
 
                 <Route
                     path="/admin/orders"
                     element={
-                        isAuthenticated
+                        isAuthenticated && isAdmin
                             ? <ManageOrders />
-                            : <Navigate to="/login" />
+                            : <Navigate to="/" />
                     }
                 />
 

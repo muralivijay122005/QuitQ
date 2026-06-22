@@ -6,11 +6,15 @@ const getToken = () => {
     return localStorage.getItem("token");
 };
 
-export const checkout = async (shippingAddress) => {
+export const checkout = async (
+    shippingAddress,
+    couponCode
+) => {
     const response = await axios.post(
         `${API_URL}/checkout`,
         {
-            shippingAddress
+            shippingAddress,
+            couponCode
         },
         {
             headers: {

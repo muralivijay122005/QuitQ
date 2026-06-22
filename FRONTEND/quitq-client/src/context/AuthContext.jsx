@@ -7,6 +7,25 @@ export function AuthProvider({ children }) {
         localStorage.getItem("token")
     );
 
+    const getRole = () => {
+        if (!token) return null;
+
+        try {
+            const payload = JSON.parse(
+                atob(token.split(".")[1])
+            );
+
+            return (
+                payload.role ||
+                payload[
+                "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+                ]
+            );
+        } catch {
+            return null;
+        }
+    };
+
     const login = (jwt) => {
         localStorage.setItem("token", jwt);
         setToken(jwt);
@@ -17,13 +36,17 @@ export function AuthProvider({ children }) {
         setToken(null);
     };
 
+    const role = getRole();
+
     return (
         <AuthContext.Provider
             value={{
                 token,
                 login,
                 logout,
+                role,
                 isAuthenticated: !!token,
+                isAdmin: role === "ADMIN",
             }}
         >
             {children}
